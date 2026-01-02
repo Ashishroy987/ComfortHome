@@ -1,9 +1,9 @@
-# ComfortHome 🏡
+#ComfortHome 
 
 ComfortHome is a full-stack Airbnb-inspired web application that allows users
 to explore property listings, view details, and manage stays.
 
-## 🚀 Tech Stack
+##Tech Stack
 - Node.js
 - Express.js
 - MongoDB
@@ -11,18 +11,18 @@ to explore property listings, view details, and manage stays.
 - CSS
 - JavaScript
 
-## ✨ Features
+##Features
 - Property listings
 - MVC architecture
 - Authentication & authorization
 - Image upload support
 - Clean UI
 
-## 📌 Purpose
+##Purpose
 This project is built for learning and portfolio purposes.
 
-## 👤 Author
+##Author
 Ashish Kumar Roy
 
-## 📄 License
+##License
 MIT License © 2026 Ashish Kumar Roy
