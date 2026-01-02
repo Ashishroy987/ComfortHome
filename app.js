@@ -81,7 +81,7 @@ app.use((req, res, next) => {
 app.post("/upload", upload.single("file"), (req, res) => {
     if (!req.file) return res.send("No file uploaded");
     res.json({
-        message: "Uploaded successfully",
+        message: "Upload successfully",
         fileUrl: req.file.path
     });
 });
