@@ -3,7 +3,7 @@ const router = express.Router();
 const Booking = require("../models/Booking");
 const { isLoggedIn } = require("../middleware");
 
-// ===================== BOOKING CONFIRMATION =====================
+// BOOKING CONFIRMATION 
 router.get("/confirmation/:id", isLoggedIn, async (req, res, next) => {
   try {
     const booking = await Booking.findById(req.params.id)

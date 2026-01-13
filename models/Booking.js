@@ -30,7 +30,7 @@ const bookingSchema = new mongoose.Schema({
   },
 });
 
-// Optional: Add index for faster queries by user or listing
+//  Add index for faster queries by user or listing
 bookingSchema.index({ user: 1 });
 bookingSchema.index({ listing: 1 });
 
