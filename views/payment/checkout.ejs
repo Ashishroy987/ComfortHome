@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checkout</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+  <h1>Pay for <%= listing.title %></h1>
+  <p>Amount: ₹<%= listing.price %></p>
+  <button id="payBtn">Pay Now</button>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const payBtn = document.getElementById("payBtn");
+      if (!payBtn) return;
+
+      payBtn.addEventListener("click", async function () {
+        try {
+          payBtn.disabled = true;
+          payBtn.innerText = "Processing...";
+
+          const listingPrice = parseFloat("<%= listing.price %>");
+          const amountPaise = Math.round(listingPrice * 100);
+
+          const res = await fetch("/payment/create-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount: amountPaise }),
+          });
+
+          const order = await res.json();
+          if (!order.id) throw new Error("Order creation failed");
+
+          const rzp = new Razorpay({
+            key: "<%= razorpayKey %>",
+            amount: order.amount,
+            currency: "INR",
+            name: "ComfortHome",
+            description: "Property Booking",
+            order_id: order.id,
+            handler: async function (response) {
+              const verifyRes = await fetch("/payment/verify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  listingId: "<%= listing._id %>",
+                  amount: amountPaise,
+                }),
+              });
+
+              const result = await verifyRes.json();
+              if (result.success) {
+                window.location.href = `/booking/confirmation/${result.bookingId}`;
+              } else {
+                alert(result.error || "Payment failed");
+                payBtn.disabled = false;
+                payBtn.innerText = "Pay Now";
+              }
+            },
+            prefill: {
+              name: "<%= user ? user.username : '' %>",
+              email: "<%= user ? user.email : '' %>",
+            },
+            theme: { color: "#fe424d" },
+            modal: {
+              ondismiss: function () {
+                payBtn.disabled = false;
+                payBtn.innerText = "Pay Now";
+              },
+            },
+          });
+
+          rzp.open();
+        } catch (err) {
+          console.error(err);
+          alert(err.message || "Something went wrong");
+          payBtn.disabled = false;
+          payBtn.innerText = "Pay Now";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

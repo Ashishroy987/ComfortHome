@@ -1,0 +1,28 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5">
+  <div class="card p-4 shadow">
+    <h2 class="text-success">Booking Confirmed</h2>
+    <hr>
+
+    <% if (booking.listing) { %>
+      <p><strong>Property:</strong> <%= booking.listing.title %></p>
+      <p><strong>Location:</strong> <%= booking.listing.location %></p>
+    <% } %>
+
+    <% if (booking.user) { %>
+      <p><strong>Booked By:</strong> <%= booking.user.username %> (<%= booking.user.email %>)</p>
+    <% } %>
+
+    <p><strong>Amount Paid:</strong> ₹ <%= booking.amount %></p>
+    <p><strong>Payment ID:</strong> <%= booking.paymentId %></p>
+
+    <p><strong>Booking Date:</strong>
+      <%= booking.bookedAt ? booking.bookedAt.toDateString() : "N/A" %>
+    </p>
+
+    <a href="/listings" class="btn btn-primary mt-3">
+      Go to Listings
+    </a>
+  </div>
+</div>

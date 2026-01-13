@@ -1,37 +1,34 @@
 const express = require("express");
 const router = express.Router();
-const wrapAsync = require("../utlis/wrapAsync.js");
-const Listing = require("../models/listing.js");
-const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
-const listingController = require("../controllers/listings.js");
 const multer = require("multer");
+const { isLoggedIn, isOwner, validateListing } = require("../middleware");
+const wrapAsync = require("../utils/wrapAsync");
+const listingController = require("../controllers/listings");
 
 // Cloudinary storage
-const { storage } = require("../cloudConfig.js");
+const { storage } = require("../cloudConfig");
 const upload = multer({ storage });
 
-// ROUTES
-
-// Index & Create
+// INDEX & CREATE
 router.route("/")
     .get(wrapAsync(listingController.index))
     .post(
         isLoggedIn,
-        upload.single("image"), // Correct field name for form input
+        upload.single("image"),
         validateListing,
         wrapAsync(listingController.createListing)
     );
 
-// New form
+// NEW FORM
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
-// Show, Update & Delete by ID
+// SHOW, UPDATE & DELETE
 router.route("/:id")
     .get(wrapAsync(listingController.showListing))
     .put(
         isLoggedIn,
         isOwner,
-        upload.single("image"), // Correct field name
+        upload.single("image"),
         validateListing,
         wrapAsync(listingController.updateListing)
     )
@@ -41,7 +38,7 @@ router.route("/:id")
         wrapAsync(listingController.destroyListing)
     );
 
-// Edit form
+// EDIT FORM
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
 module.exports = router;

@@ -61,15 +61,15 @@
       <div class="navbar-nav ms-auto">
 
         <a class="nav-link" href="/listings/new">
-          ComfortHome Listings
+          Become a Host
         </a>
 
-        <% if (!currUser) { %>
+        <% if (typeof currUser === "undefined" || !currUser) { %>
           <a class="nav-link" href="/signup"><b>Sign up</b></a>
           <a class="nav-link" href="/login"><b>Log in</b></a>
         <% } %>
 
-        <% if (currUser) { %>
+        <% if (typeof currUser !== "undefined" && currUser) { %>
           <span class="nav-link">
             Hi, <%= currUser.username %>
           </span>
